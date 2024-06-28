@@ -1,9 +1,27 @@
 // creacion de la logica de forma imperativa, se pueden crear varios estados
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
 const UseState = ({ name }) => {
 
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        console.log('Empieza efecto');
+        
+        if(loading) {
+            setTimeout(() => {
+                console.log('Hace valiacion');
+    
+                setLoading(false);
+    
+                console.log('Termina valiacion');
+            }, 1800)
+        }
+
+        console.log('Termina efecto');
+
+    }, [loading]);
 
     return (
         <>
@@ -17,10 +35,16 @@ const UseState = ({ name }) => {
                 </>
             )}
 
+            {loading && (
+                <>
+                    <p> Cargando... </p>
+                </>
+            )}
+
             <div>
                 <input placeholder='Código de seguridad'/>
                 <button
-                    onClick={() => setError(!error)}
+                    onClick={() => setLoading(true)}
                 > 
                     Comprobar
                 </button>
