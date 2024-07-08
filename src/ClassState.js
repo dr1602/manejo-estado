@@ -2,12 +2,15 @@
 import React from 'react';
 import { Loading } from './Loading';
 
+const SECURITY_CODE = 'paradigma'
+
 class ClassState extends React.Component {
 
     constructor() {
         super();
 
         this.state = {
+            value: '',
             error: false,
             loading: false,
         };  
@@ -32,14 +35,21 @@ class ClassState extends React.Component {
             setTimeout(() => {
                 console.log('Hace valiacion');
     
-                this.setState({ loading: !this.state.loading });
-    
+                if (SECURITY_CODE === this.state.value ) {
+                    this.setState({ loading: !this.state.loading });
+                } else {
+                    this.setState({ error: true, loading: false})
+                }
+                
                 console.log('Termina valiacion');
             }, 1800)
         };
     }
 
     render() {
+
+        // const { error, loading, value} = this.state
+
         return (
             <>
                 <h2> Eliminar {this.props.name} </h2>
@@ -47,11 +57,17 @@ class ClassState extends React.Component {
                 <p> Escribe el código de seguridad para eliminar. </p>
 
                 <div>
-                    <input placeholder='Código de seguridad'/>
+                    <input 
+                        placeholder='Código de seguridad'
+                        value={this.state.value}
+                        onChange={(e) => {
+                            this.setState({ value: e.target.value })
+                        }}
+                    />
                     <button
                         // onClick={() => this.setState({ error: !this.state.error}) }
                         // onClick={() => this.setState( prevState => ({ error: !prevState.error }) )}
-                        onClick={() => this.setState({ loading: !this.state.loading})}
+                        onClick={() => this.setState({ error: false, loading: !this.state.loading})}
                     > 
                         Comprobar 
                     </button>
