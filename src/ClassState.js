@@ -36,9 +36,9 @@ class ClassState extends React.Component {
                 console.log('Hace valiacion');
     
                 if (SECURITY_CODE === this.state.value ) {
-                    this.setState({ loading: !this.state.loading });
+                    this.setState({ loading: !this.state.loading }); 
                 } else {
-                    this.setState({ error: true, loading: false})
+                    this.setState({ error: true, loading: false}); // varios actualziadores en bloque para actualizar un estado en bloque, cuando una accion de un usuario, le mandamos todas la actualizaciones dentro de un objeto
                 }
                 
                 console.log('Termina valiacion');
