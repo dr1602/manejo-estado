@@ -14,11 +14,42 @@ const UseState = ({ name }) => {
         confirmed: false,
     })
 
-    // const [value, setValue] = useState('');
-    // const [error, setError] = useState(false);
-    // const [loading, setLoading] = useState(false);
-
     console.log(state);
+
+    const onError = () => {
+        setState({ ...state, loading: false, error: true })
+    }
+
+    const onConfirm = () => {
+        setState({ ...state, loading: false, error: false, confirmed: true })
+    }
+
+    const onWrite = (newValue) => {
+        // solucion para no recargar infinitament estado
+        if (state.error) {
+            setState({ ...state, error: false, value: newValue })
+        } else {
+            // aqui se puede pero cada que escribes se actualiza el estado
+            setState({ ...state, value: newValue })
+        }
+    }
+
+    const onCheck = () => {
+        setState({ ...state, loading: true })
+    }
+
+    const onDelete = () => {
+        setState({ ...state, deleted: true })
+    }
+
+    const onReset = () => {
+        setState({
+            ...state,
+            confirmed: false,
+            deleted: false,
+            value: '',
+        })
+    }
 
     useEffect(() => {
         console.log('Empieza efecto');
@@ -29,20 +60,11 @@ const UseState = ({ name }) => {
                 console.log('Hace valiacion');
     
                 if ( state.value !== SECURITY_CODE ) {
-                    setState({
-                        ...state,
-                        loading: false,
-                        error: true,
-                    })
+                    onError();
                     
                     console.log(`${state.value !== SECURITY_CODE}`)
                 } else {
-                    setState({
-                        ...state,
-                        loading: false,
-                        error: false,
-                        confirmed: true,
-                    })
+                    onConfirm();
                 }
     
                 console.log('Termina valiacion');
@@ -77,31 +99,14 @@ const UseState = ({ name }) => {
                         placeholder='Código de seguridad'
                         value={state.value}
                         onChange={(e) => {
-                            // solucion para no recargar infinitament estado
-                            if (state.error) {
-                                setState({
-                                    ...state,
-                                    error: false,
-                                    value: e.target.value,
-                                })
-                            } else {
-                                // aqui se puede pero cada que escribes se actualiza el estado
-                                setState({
-                                    ...state,
-                                    value: e.target.value,
-                                })
-                            }
-    
+                            onWrite(e.target.value);
                         }}
                     />
                     <button
                         onClick={() => {
                             // setError(false)
                             // aqui funciona
-                            setState({
-                                ...state,
-                                loading: true,
-                            })
+                            onCheck()
                         }}
                     > 
                         Comprobar
@@ -119,10 +124,7 @@ const UseState = ({ name }) => {
                 <div>
                     <button
                         onClick={ () => {
-                                setState({
-                                    ...state,
-                                    deleted: true,
-                                })
+                                onDelete();
                             } 
                         }
                     > 
@@ -130,11 +132,7 @@ const UseState = ({ name }) => {
                     </button>
                     <button
                         onClick={ () => {
-                            setState({
-                                ...state,
-                                confirmed: false,
-                                value: '',
-                            })
+                            onReset()
                         } 
                     }
                     > 
@@ -150,12 +148,7 @@ const UseState = ({ name }) => {
 
                     <button
                         onClick={ () => {
-                            setState({
-                                ...state,
-                                confirmed: false,
-                                deleted: false,
-                                value: '',
-                            })
+                            onReset()
                         } 
                     }
                     > 
